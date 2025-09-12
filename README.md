@@ -1,11 +1,14 @@
 # Rojo-Decode
 2025-2026 FTC Season
-https://github.com/CareyK25/FTC-IntoTheDeep/tree/master
 
-Team Assignment & Goals
+[IntoTheDeep Season Code](https://github.com/CareyK25/FTC-IntoTheDeep/tree/master)
 
 
-# Computer vision
+## Team Assignment & Goals
+
+| 
+
+## Computer vision
   - 9/15/25-9/20/25
     - make a dataset ~500-750 images
     - label them & add noise
