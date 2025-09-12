@@ -4,7 +4,8 @@ https://github.com/CareyK25/FTC-IntoTheDeep/tree/master
 
 Team Assignment & Goals
 
-Computer vision
+
+# Computer vision
   - 9/15/25-9/20/25
     - make a dataset ~500-750 images
     - label them & add noise
