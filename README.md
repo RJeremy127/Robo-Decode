@@ -7,7 +7,7 @@
 ## Team Assignment & Goals
 
 ### Computer Vision
-- # will start once the game field arives#
+- # will start once the game field arives
 - **9/15/25 – 9/20/25**
   - Make a dataset (~500–750 images)
   - Label them & add noise  
