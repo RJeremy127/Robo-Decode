@@ -6,25 +6,31 @@
 
 ## Team Assignment & Goals
 
-### Computer vision
-  - 9/15/25-9/20/25
-    - make a dataset ~500-750 images
-    - label them & add noise
-  - 9/22/25-9/26/25
-    -train model
-    -quantize it
-      - accuracy loss 1~5%
-        -if more, then try QAT training
-          - extend deadline to 10/3
-  - 9/29/25-10/3/25  
-    -test and calabrate the limelight   
-    -try to program the intake and go to the designated object
-  -10/6/25-10/10/25   
-    - work with david for MOTIF detect and implement it.    
-  -10/13/25-10/17/25 
-      -finish the intake program  
-      -implement MOTIF data to complete the autonomous subroutine  
-  -10/20/25-10/24/25   
-    -Localization and impplement the objecct detection system with it 
+### Computer Vision
+
+- **9/15/25 – 9/20/25**
+  - Make a dataset (~500–750 images)
+  - Label them & add noise  
+
+- **9/22/25 – 9/26/25**
+  - Train model  
+  - Quantize it  
+    - Expected accuracy loss: **1–5%**  
+    - If more, try QAT training  
+      - Extend deadline to **10/3**  
+
+- **9/29/25 – 10/3/25**
+  - Test and calibrate the Limelight  
+  - Program the intake and go to the designated object  
+
+- **10/6/25 – 10/10/25**
+  - Work with David for MOTIF detection and implement it  
+
+- **10/13/25 – 10/17/25**
+  - Finish the intake program  
+  - Implement MOTIF data to complete the autonomous subroutine  
+
+- **10/20/25 – 10/24/25**
+  - Localization and implementation of the object detection system with it  
 
       
