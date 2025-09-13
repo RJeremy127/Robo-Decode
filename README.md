@@ -15,7 +15,7 @@
 - **9/22/25 – 9/26/25**
   - Train model  
   - Quantize it  
-    - Expected accuracy loss: **1–5%**  
+    - Expected mAP loss: **1–5%**  
     - If more, try QAT training  
       - Extend deadline to **10/3**  
 
