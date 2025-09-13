@@ -11,7 +11,7 @@
 >  Waiting for **decode field** delivery — work will begin once it arrives.
 
 - [ ] **9/15/25 – 9/20/25**
-- [ ] will postpone until field comes in
+- [ ] will postpone until the field comes in
   - [ ] Make a dataset (~500–750 images)  
   - [ ] Label them & add noise
       
@@ -32,10 +32,10 @@
 
 - [ ] **10/13/25 – 10/17/25**  
   - [ ] Finish the intake program  
-  - [ ] Implement MOTIF data to complete the autonomous subroutine  
+  - [ ] Implement MOTIF data 
 
-- [ ] **10/20/25 – 10/24/25**  
-  - [ ] Localization and implement the object detection system with it  
+- [ ] **10/20/25 – 10/27/25**  
+  - [ ] Localization 
 
-- [ ] **10/27/25 – 10/31/25**  
-  - [ ] Complete autonomous sub-routine for ball collection  
+- [ ] **10/27/25 – 11/21/25**  
+  - [ ] Complete and accurate autonomous sub-routine for ball collection  
