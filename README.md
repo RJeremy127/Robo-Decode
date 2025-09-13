@@ -10,7 +10,7 @@
 
 >  Waiting for **decode field** delivery — work will begin once it arrives.
 
-- [ ] **9/15/25 – 9/20/25**
+- [x] **9/15/25 – 9/20/25**
 - [ ] will postpone until field comes in
   - [ ] Make a dataset (~500–750 images)  
   - [ ] Label them & add noise
