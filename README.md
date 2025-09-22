@@ -1,8 +1,9 @@
 # Rojo-Decode
 2025-2026 FTC Season
-
 [IntoTheDeep Season Code](https://github.com/CareyK25/FTC-IntoTheDeep/tree/master)
 
+> [!Note]
+> The IP address for the Limelight is `172.28.0.1:5801`
 
 ## Team Assignment & Goals
 
