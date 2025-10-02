@@ -11,21 +11,21 @@
 
 >  Waiting for **decode field** delivery — work will begin once it arrives.
 
-- [ ] **9/15/25 – 9/20/25**
-- [ ] will postpone until the field comes in
-  - [ ] Make a dataset (~500–750 images)  
-  - [ ] Label them & add noise
+- [x ] **9/15/25 – 9/20/25**
+- [ x] will postpone until the field comes in
+  - [x ] Make a dataset (~500–750 images)  
+  - [ x] Label them & add noise
       
 
-- [ ] **9/22/25 – 9/26/25**  
-  - [ ] Train model  
-  - [ ] Quantize it  
-    - [ ] Accuracy loss: **1–5%**  
-    - [ ] If more, try QAT training  
-      - [ ] Extend deadline to **10/3**  
+- [x ] **9/22/25 – 9/26/25**  
+  - [x ] Train model  
+  - [x ] Quantize it  
+    - [ x] Accuracy loss: **1–5%**  
+    - [ x] If more, try QAT training  
+      - [x ] Extend deadline to **10/3**  
 
-- [ ] **9/29/25 – 10/3/25**  
-  - [ ] Test and calibrate the Limelight  
+- [x ] **9/29/25 – 10/3/25**  
+  - [x ] Test and calibrate the Limelight  
   - [ ] Program the intake and go to the designated object  
 
 - [ ] **10/6/25 – 10/10/25**  
