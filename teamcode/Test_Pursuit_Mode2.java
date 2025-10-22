@@ -4,16 +4,20 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.PurePursuit.RobotMovement;
 import org.firstinspires.ftc.teamcode.control.Movement;
 import org.firstinspires.ftc.teamcode.control.Odometry;
 import org.firstinspires.ftc.teamcode.datatypes.Pair;
 import org.firstinspires.ftc.teamcode.datatypes.Pose;
 import org.firstinspires.ftc.teamcode.util.HardwareMapper;
+import org.firstinspires.ftc.teamcode.util.MathFunctions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 @Autonomous(name="Test_Persuit_Mode2", group="Linear OpMode")
 

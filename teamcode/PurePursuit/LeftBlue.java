@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.PurePursuit;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.datatypes.Pose;
 import org.firstinspires.ftc.teamcode.util.Actuation;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.Actuation;
 
 public class LeftBlue extends LinearOpMode {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Actuation.setup(hardwareMap, new Pose(0,0,0), telemetry);
 
         telemetry.addData("Status", "Initialized");
@@ -18,9 +19,10 @@ public class LeftBlue extends LinearOpMode {
         waitForStart();
 
 
-        Pose [] p = new Pose[]{new Pose(0, 0, Math.toRadians(90))};
+        Pose [] p = new Pose[]{new Pose(10, 0, Math.toRadians(45))};
         Route r = new Route(p);
-        r.run(0.3, .16);
-        Thread.sleep(10000);
+        r.run(0.2, 0.2);
+
+        sleep(10000);
     }
 }

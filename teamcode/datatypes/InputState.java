@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.datatypes;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.gamepad1;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class InputState { // this is used to store input states of controllers so you can save and compare states

@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,7 +42,7 @@ import org.firstinspires.ftc.teamcode.rendertypes.BoundingBox;
 import org.firstinspires.ftc.teamcode.rendertypes.Display;
 
 @TeleOp(name="TeLeOp_Odometry_Display", group="Linear OpMode")
-
+@Disabled
 
 public class TeLeOp_Odometry_Display extends LinearOpMode {
 

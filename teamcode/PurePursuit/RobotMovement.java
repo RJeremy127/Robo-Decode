@@ -32,14 +32,12 @@ public class RobotMovement {
         double dist = Math.sqrt(Math.pow(deltaY, 2) + Math.pow(deltaX, 2));
         double deltaAngle = MathFunctions.angleWrap(targetPose.getR()-robotPose.getR());
         double dX = 0,dY = 0;
-        if (dist != 0) {
+        if (Math.abs(dist) > 1.5) {
             double movementXPower = deltaX/dist; // Normalizes the movement Power
             double movementYPower = deltaY/dist;
             dX = movementXPower*movementSpeed;
             dY = movementYPower*movementSpeed;
         }
-        Pair vector = new Pair(dX, dY);
-        vector.rotate(-(robotPose.getR()-Math.atan(dY/dX)));
         double deltaHeading = 0;
         if (deltaAngle > Math.toRadians(3)) {
             deltaHeading = Math.max(((deltaAngle/(Math.PI))*turnSpeed), turnSpeed);
@@ -47,13 +45,14 @@ public class RobotMovement {
         else if (deltaAngle<Math.toRadians(-3)){
             deltaHeading = Math.min(((deltaAngle/(Math.PI))*turnSpeed), -turnSpeed);
         }
+        telemetry.addData("deltaHeading", deltaAngle);
         telemetry.addData("Pose", robotPose);
         telemetry.update();
-        Actuation.drive(vector.getY(), vector.getX(), deltaHeading); // ???????????
+        Actuation.drive(dY, dX, deltaHeading);
         return new double[]{dX, dY, deltaHeading};
     }
 
-    public static double[] goToPosition(Pose targetPose, double movementSpeed) {
+    public static double[] goToPosition(Pose targetPose, Pose robotPose, double movementSpeed) {
         double deltaX = targetPose.getX() - robotPose.getX();
         double deltaY = targetPose.getY() - robotPose.getY();
         double distance = MathFunctions.distance(new Point(targetPose.getX(), targetPose.getY()), new Point(robotPose.getX(), robotPose.getY()));
@@ -64,7 +63,7 @@ public class RobotMovement {
             dX = movementXPower*movementSpeed;
             dY = movementYPower*movementSpeed;
         }
-        Actuation.drive(dY, dX, 0);
+        Actuation.drive(dX, dY, 0);
         return new double[]{dX, dY, 0};
     }
 
@@ -77,7 +76,6 @@ public class RobotMovement {
         else if (deltaHeading<Math.toRadians(-3)){
             deltaHeading = Math.min(((deltaAngle/(Math.PI))*turnSpeed), -turnSpeed);
         }
-        Actuation.drive(0,0, deltaHeading);
         return new double[]{0,0,deltaHeading};
     }
 

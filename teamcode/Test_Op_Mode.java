@@ -1,7 +1,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,18 +14,15 @@ import org.firstinspires.ftc.teamcode.control.Movement;
 import org.firstinspires.ftc.teamcode.control.Odometry;
 import org.firstinspires.ftc.teamcode.datatypes.InputState;
 import org.firstinspires.ftc.teamcode.datatypes.Pair;
-import org.firstinspires.ftc.teamcode.datatypes.Pose;
 import org.firstinspires.ftc.teamcode.rendertypes.BoundingBox;
 import org.firstinspires.ftc.teamcode.rendertypes.Display;
 import org.firstinspires.ftc.teamcode.rendertypes.GameMap;
 import org.firstinspires.ftc.teamcode.util.HardwareMapper;
 
-import java.util.ArrayList;
-
-@Autonomous(name="Test_Auto_Mode", group="Linear OpMode")
+@TeleOp(name="Test_Op_Mode", group="Linear OpMode")
 
 
-public class Test_Auto_Mode extends LinearOpMode {
+public class Test_Op_Mode extends LinearOpMode {
 
 
     private GameMap field;
@@ -37,7 +33,6 @@ public class Test_Auto_Mode extends LinearOpMode {
     private Servo testservo, clawWristServo, clawServo;
     private Servo axleServoL, axleServoR;
 
-    private ArrayList<Pose> waypoints;
 
 
     private Odometry otto;
@@ -73,7 +68,7 @@ public class Test_Auto_Mode extends LinearOpMode {
         rightSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightSlideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
+
         leftSlideMotor.setTargetPosition(0);
         leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -98,16 +93,44 @@ public class Test_Auto_Mode extends LinearOpMode {
         boolean canDrive = false;
         boolean runDisplay = false;
 
+        boolean bucketScoring = true;
+
+//        Gamepad.RumbleEffect rumbler = new Gamepad.RumbleEffect.Builder()
+//                .addStep(0.0, 1.0, 500)
+//                .addStep(0.0, 0.0, 300)
+//                .addStep(1.0, 0.0, 250)
+//                .addStep(0.0, 0.0, 250)
+//                .addStep(1.0, 0.0, 250).build();
+//
+//        Gamepad.RumbleEffect.Builder rippleBuilder = new Gamepad.RumbleEffect.Builder();
+//
+//        for (int i = 0; i < 100; i++) {
+//            // Example logic for step values; you can modify this based on your needs.
+//
+//            // Add step to the builder
+//            rippleBuilder.addStep(i/100.0, 1-(i/100.0), 30);
+//        }
+//        for (int i = 0; i < 100; i++) {
+//            // Example logic for step values; you can modify this based on your needs.
+//            // Add step to the builder
+//            rippleBuilder.addStep(1-(i/100.0), (i/100.0), 30);
+//        }
+//
+//// Build the final RumbleEffect
+//        Gamepad.RumbleEffect ripple = rippleBuilder.build();
 
         double gowthams = 0.5;
-        double slideGowthams = 0.4;
+        double slideGowthams = 1;
 
 
-        double axleAngle = 0.5;
+        double axleAngle = (axleServoL.getPosition() + axleServoR.getPosition())/2;
         axleServoL.setPosition(0.5);
         axleServoR.setPosition(0.5);
-        double clawServoPos = 0.53;
+        double clawServoPos = 0.12;
         clawServo.setPosition(clawServoPos);
+
+        double clawWristServoPos = 0.5;
+        clawWristServo.setPosition(clawWristServoPos);
 
         int leftSlidePos = 0;
         int rightSlidePos = 0;
@@ -121,18 +144,19 @@ public class Test_Auto_Mode extends LinearOpMode {
         otto.resetEncoders();
         disp.fill('.');
 
-        waypoints = new ArrayList<>();
-
     while (opModeIsActive()) { // todo THIS IS THE MAIN LOOP
         otto.updateOdometry();
         // grab input state at beginning of loop and put it into an object
         InputState gp1 = new InputState(gamepad1);
         InputState gp2 = new InputState(gamepad2);
+
         // todo THUMBSTICKS to drive
-
-
         if (canDrive) {
-            temp_old_drive(gamepad1, gamepad2, gowthams, motors, telemetry);
+            if ((axleServoL.getPosition() > 0.69) || axleServoL.getPosition() < 0.45)  {
+                temp_old_drive(gamepad1, gamepad2, 0.45, motors, telemetry);
+            } else {
+                temp_old_drive(gamepad1, gamepad2, gowthams, motors, telemetry);
+            }
         }
 
         // todo OPTIONS to toggle driving GUIDE to toggle display
@@ -144,7 +168,7 @@ public class Test_Auto_Mode extends LinearOpMode {
             }
             canDrive = !canDrive;
         }
-        if (gp1.isGuide() && !pgp1.isGuide()) {
+        if (gp1.isShare() && !pgp1.isShare()) {
             if (runDisplay) {
                 gamepad1.rumbleBlips(1);
             } else {
@@ -153,70 +177,135 @@ public class Test_Auto_Mode extends LinearOpMode {
             runDisplay = !runDisplay;
         }
 
+        if (gp2.isGuide() && !pgp2.isGuide()) {
+            if (bucketScoring) {
+                gamepad1.rumbleBlips(1);
+            } else {
+                gamepad1.rumbleBlips(2);
+            }
+            bucketScoring = !bucketScoring;
+        }
+        // todo Crosspad thing
+        if (gp1.isDpad_right() && !pgp1.isDpad_right()) { // open and close claw
+            if (clawServo.getPosition() > 0.22) {
+                clawServo.setPosition(0.11);
+            } else {
+                clawServo.setPosition(0.46);
+            }
+        }
+        if (gp1.isDpad_left() && !pgp1.isDpad_left()) { // open and close claw
+            clawWristServoPos = 0.5;
+            clawWristServo.setPosition(clawWristServoPos);
+        }
+
+        if (gp1.isDpad_up()) { // rotate claw formard and back
+            clawWristServoPos += 0.01;
+            clawWristServo.setPosition(clawWristServoPos);
+        } else if (gp1.isDpad_down()) {
+            clawWristServoPos -= 0.01;
+            clawWristServo.setPosition(clawWristServoPos);
+        }
+        clawWristServoPos = bound(clawWristServoPos, 0.146, 0.772);
+
         // todo REGULAR BUTTONS
         if (gp1.isSquare()) {
-            clawServoPos += 0.004;
-            clawServo.setPosition(0.53);
-        } else if (gp1.isCircle()) {
-            clawServoPos-= 0.004;
-            clawServo.setPosition(1);
-        }
-        clawServoPos = bound(clawServoPos, 0.53, 1);
+            axleAngle = 0.73;
+            axleServoR.setPosition(axleAngle);
+            axleServoL.setPosition(axleAngle);
 
-        if (gp1.isTriangle())  {
-            leftSlidePos -= (int)(100*slideGowthams);
+            clawWristServoPos = 0.5;
+            clawWristServo.setPosition(clawWristServoPos);
+            clawServo.setPosition(0.46);
+
+        }
+        if (gp1.isCircle()) {
+            axleAngle = 0.44;
+            axleServoR.setPosition(axleAngle);
+            axleServoL.setPosition(axleAngle);
+
+
+            leftSlidePos = -1980;
             leftSlideMotor.setTargetPosition(leftSlidePos + leftSlidePosOffset);
             leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftSlideMotor.setPower(slideGowthams);
 
-            rightSlidePos -= (int)(100*slideGowthams);
+            rightSlidePos = -1980;
+            rightSlideMotor.setTargetPosition(rightSlidePos + rightSlidePosOffset);
+            rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlideMotor.setPower(slideGowthams);
+        }
+
+        if (gp1.isTriangle())  {
+            leftSlidePos -= (int)(30);
+            leftSlideMotor.setTargetPosition(leftSlidePos + leftSlidePosOffset);
+            leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlideMotor.setPower(slideGowthams);
+
+            rightSlidePos -= (int)(30);
             rightSlideMotor.setTargetPosition(rightSlidePos + rightSlidePosOffset);
             rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlideMotor.setPower(slideGowthams);
         } else if (gp1.isCross()) {
-            leftSlidePos += (int)(100*slideGowthams);
+            leftSlidePos += (int)(30);
             leftSlideMotor.setTargetPosition(leftSlidePos + leftSlidePosOffset);
             leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             leftSlideMotor.setPower(slideGowthams);
 
-            rightSlidePos += (int)(100*slideGowthams);
+            rightSlidePos += (int)(30);
             rightSlideMotor.setTargetPosition(rightSlidePos + rightSlidePosOffset);
             rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlideMotor.setPower(slideGowthams);
-        } else if ((pgp1.isCross() || pgp1.isTriangle()) && !(gp1.isCross() || gp1.isTriangle())){
-//            int target = rightSlideMotor.getCurrentPosition();
-//            rightSlideMotor.setTargetPosition(target);
-//            leftSlideMotor.setTargetPosition(target);
+        } else if (pgp1.isTriangle() || pgp1.isCross()) {
+            rightSlidePos = rightSlideMotor.getCurrentPosition();
+            leftSlidePos = leftSlideMotor.getCurrentPosition();
+
+            leftSlideMotor.setTargetPosition(leftSlidePos + leftSlidePosOffset);
+            leftSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlideMotor.setPower(slideGowthams);
+
+            rightSlideMotor.setTargetPosition(rightSlidePos + rightSlidePosOffset);
+            rightSlideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlideMotor.setPower(slideGowthams);
+
         }
-        leftSlidePos = (int)bound(leftSlidePos, -1900, 0);
-        rightSlidePos = (int)bound(rightSlidePos, -1900, 0);
+        leftSlidePos = (int)bound(leftSlidePos, -1980, 0);
+        rightSlidePos = (int)bound(rightSlidePos, -1980, 0);
 
         // todo TRIGGERS
-        if (gp1.getLeft_trigger() > 0.9) {
-            axleAngle-= 0.003;
+        if (gp1.getLeft_trigger() > 0.9) { // up
+            axleAngle-= 0.0035;
+            axleServoL.setPosition(axleAngle);
+            axleServoR.setPosition(axleAngle);
+        } else if (gp1.getRight_trigger() > 0.9) {
+            axleAngle+=0.0035;
+            axleServoL.setPosition(axleAngle);
+            axleServoR.setPosition(axleAngle);
+        } else if (pgp1.getRight_trigger() > 0.9 || pgp1.getLeft_trigger() > 0.9) {
+            axleAngle = (axleServoL.getPosition() + axleServoR.getPosition())/2;
             axleServoL.setPosition(axleAngle);
             axleServoR.setPosition(axleAngle);
         }
-        if (gp1.getRight_trigger() > 0.9) {
-            axleAngle+=0.003;
-            axleServoL.setPosition(axleAngle);
-            axleServoR.setPosition(axleAngle);
-        }
-        axleAngle = bound(axleAngle, 0.4, 0.73);
+
+        // 0.73 pick up
+        // 0.67 lift
+        //
+
+        axleAngle = bound(axleAngle, 0.42, 0.74);
 
 
 
 
         // todo BUMPERS
+
         if (gp1.isLeft_bumper() && !pgp1.isLeft_bumper()) {
 
-            if (gp1.isTriangle()) {
+            if (!canDrive) {
                 slideGowthams += 0.1;
             } else {
                 gowthams+= 0.1;
             }
         } else if (gp1.isRight_bumper() && !pgp1.isRight_bumper()) {
-            if (gp1.isTriangle()) {
+            if (!canDrive) {
                 slideGowthams -= 0.1;
             } else {
                 gowthams+= 0.1;
@@ -243,9 +332,18 @@ public class Test_Auto_Mode extends LinearOpMode {
         }
 
         if (gp2.isRight_bumper() && !pgp2.isRight_bumper()) {
-            rightSlidePosOffset += 10;
+            rightSlidePosOffset -= 10;
         } else if (gp2.getRight_trigger() > 0.2 && !(pgp2.getRight_trigger() > 0.2)) {
-            rightSlidePosOffset -=10;
+            rightSlidePosOffset +=10;
+        }
+
+        if (gp2.isGuide() && !pgp2.isGuide()) {
+            if (bucketScoring) {
+                gamepad1.rumbleBlips(1);
+            } else {
+                gamepad1.rumbleBlips(2);
+            }
+            bucketScoring = !bucketScoring;
         }
 
 
@@ -260,13 +358,32 @@ public class Test_Auto_Mode extends LinearOpMode {
         } else {
             telemetry.addData("gowthams Speed", gowthams);
             telemetry.addData("Driving is ", ((canDrive) ? "enabled" : "disabled"));
-            telemetry.addData("left motorpos", leftSlideMotor.getCurrentPosition() + " +  " + leftSlidePosOffset);
-            telemetry.addData("right motorpos", rightSlideMotor.getCurrentPosition() + " +  " + rightSlidePosOffset);
+            telemetry.addData("Scoring by ", ((bucketScoring) ? "bucket" : "specimen"));
+            telemetry.addData("left motorpos", leftSlideMotor.getCurrentPosition() + " + " + leftSlidePosOffset);
+            telemetry.addData("right motorpos", rightSlideMotor.getCurrentPosition() + " + " + rightSlidePosOffset);
 //            telemetry.addData("left target motorpos", leftSlidePos);
 //            telemetry.addData("right target motorpos", rightSlidePos);
 
-            telemetry.addData("odometry:", otto.getPose());
-            telemetry.addData("axleServoPos", axleAngle);
+            telemetry.addData("odometry ", otto.getPose());
+            telemetry.addData("Axle Servo ", axleAngle);
+            telemetry.addData("Claw Wrist Servo ", clawWristServo.getPosition());
+            telemetry.addData("Claw Servo", clawServo.getPosition());
+
+            telemetry.addData(" ", " ");
+            telemetry.addData("PRESET POSITION REFERENCES", "");
+            telemetry.addData("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", "");
+
+            if (bucketScoring) {
+
+            } else {
+                telemetry.addData("Grab Sample : ", "0.00");
+                telemetry.addData("Lift Sample : ", "0.00");
+                telemetry.addData("[deposit sample to human player]", " ");
+                telemetry.addData("Grab specimen ", "0.00");
+                telemetry.addData("T1 hang specimen ", "0.00");
+                telemetry.addData("T2 hang specimen", "0.00");
+            }
+
 
 //            telemetry.addData("raw left thumbstick", gamepad1.left_stick_x + ", " + gamepad1.left_stick_y);
 //            telemetry.addData("raw right thumbstick", gamepad1.right_stick_x + ", " + gamepad1.right_stick_y);
