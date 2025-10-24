@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.vision.Limelight;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLStatus;
@@ -7,22 +7,21 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import org.firstinspires.ftc.robotcontroller.Constants;
+import org.firstinspires.ftc.robotcontroller.internal.HardwareMapper;
+import org.firstinspires.ftc.robotcontroller.Drive;
 
-import org.firstinspires.ftc.teamcode.util.HardwareMapper;
-
-@Autonomous
+@TeleOp(name = "colortrack")
 public class ColorTrack extends OpMode {
-
     private Limelight3A limelight;
-
-
-
-    private DcMotor [] motors;
+    private DcMotor[] motors;
+    private Drive drive;
 
     @Override
     public void init() {
         motors = HardwareMapper.getMotors(hardwareMap);
-        //LLmotor = hardwareMap.get(DcMotor.class, "LLmotor");
+        drive = new Drive(motors);
+
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(4);
     }
@@ -30,54 +29,34 @@ public class ColorTrack extends OpMode {
     @Override
     public void start() {
         limelight.start();
-
     }
 
     @Override
     public void loop() {
         LLStatus status = limelight.getStatus();
-        telemetry.addData("Name", "%s",
-                status.getName());
-        telemetry.addData("LL", "Temp: %.1fC, CPU: %.1f%%, FPS: %d",
-                status.getTemp(), status.getCpu(), (int) status.getFps());
-        telemetry.addData("Pipeline", "Index: %d, Type: %s",
-                status.getPipelineIndex(), status.getPipelineType());
-
-
 
         LLResult result = limelight.getLatestResult();
-        if (result != null && result.isValid()) {
-            double tx = result.getTx(); // How far left or right the target is (degrees)
-            double ty = result.getTy(); // How far up or down the target is (degrees)
-            double ta = result.getTa();
 
+        if (result != null && result.isValid()) {
+            double tx = result.getTx();
+            double ty = result.getTy();
+            double ta = result.getTa();
             telemetry.addData("Target X", tx);
             telemetry.addData("Target Y", ty);
-            telemetry.addData("Target area offset", ta);
+            telemetry.addData("Target Area", ta);
 
-            if (tx > 3) {
-                // LLmotor.setPower(0.1);
-                double turn = .2;
-                motors[3].setPower(turn);
-                motors[2].setPower(-turn);
-                motors[1].setPower(turn);
-                motors[0].setPower(-turn);
-            } else if (tx < -3) {
-                double turn = .2;
-                //LLmotor.setPower(-0.1);
-                motors[3].setPower(-turn);
-                motors[2].setPower(turn);
-                motors[1].setPower(-turn);
-                motors[0].setPower(turn);
+            if (tx > 5) {
+                drive.Right(0.2);
+            } else if (tx < -5) {
+                drive.Left(0.2);
             } else {
-                //LLmotor.setPower(0);
-                motors[3].setPower(0);
-                motors[2].setPower(0);
-                motors[1].setPower(0);
-                motors[0].setPower(0);
+                drive.moveForward(.2);
             }
         } else {
-            telemetry.addData("Limelight", "No Targets");
+            telemetry.addLine("No Target Found");
+            drive.stop();
         }
+
+        telemetry.update();
     }
 }
